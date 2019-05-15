@@ -2,13 +2,16 @@
 <html>
 <head>
     <title>2048V1</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css">
+  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+    
     <script type="text/javascript">
         $(function () {
             createGrid(16);
             var list;
-            $('body').on("swipeleft", moveLeft);
+            $('body').on("swipeleft", alert('left'));
             $('body').on("swiperight", moveRight);
         });
 
