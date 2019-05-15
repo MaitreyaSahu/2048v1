@@ -3,148 +3,183 @@
 <head>
     <title>2048V1</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
     <script type="text/javascript">
         $(function () {
             createGrid(16);
+            var list;
+            $('body').on("swipeleft", moveLeft);
+            $('body').on("swiperight", moveRight);
         });
 
+        //        function swipe(direction) {
+        //            if (direction == 'left') {
+        //                moveLeft();
+        //            }
+        //            else if (direction == 'right') {
+        //            moveRight();
+        //            }
+        //        else if (direction == 'up') {
+        //        moveUp();
+        //            }
+        //    else if (direction == 'down') {
+        //    moveDown();
+        //            }
+        //        }
+
+        function moveLeft() {
+            for (var i = 1; i <= 3; i++) {
+                for (var j = 0; j < 4; j++) {
+                    var pos = i + (j * 4);
+                    var k = i;
+                    do {
+                        var adjecentPos = $(list)[pos - 1];
+                        var adjecentValue = $(adjecentPos).find('div').html();
+                        var mainPos = $(list)[pos];
+                        var mainValue = $(mainPos).find('div').html();
+                        if (mainValue != undefined) {
+                            if (adjecentValue == undefined) {
+                                $(mainPos).find('div').animate({ left: '250px' });
+                                $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+                                    class: 'new c' + mainValue,
+                                    text: mainValue
+                                }));
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos--;
+                            }
+                            else if (adjecentValue == mainValue) {
+                                //$(mainPos).find('div').animate({ left: '-50px' });
+                                $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos--;
+                                //$(mainPos).find('div').animate({ left: '-50px' }, function () {
+                                //    $(adjecentPos).find('div').html(mainValue * 2);
+                                //    $(mainPos).empty().removeClass('o').addClass('b');
+                                //    //pos--
+                                //});
+                            }
+                        }
+                        k--;
+
+                    } while (k > 0);
+                }
+            }
+        }
+
+        function moveRight() {
+            for (var i = 2; i >= 0; i--) {
+                for (var j = 0; j < 4; j++) {
+                    var pos = i + (j * 4);
+                    var k = 2 - i;
+                    do {
+                        var adjecentPos = $(list)[pos + 1];
+                        var adjecentValue = $(adjecentPos).find('div').html();
+                        var mainPos = $(list)[pos];
+                        var mainValue = $(mainPos).find('div').html();
+                        if (mainValue != undefined) {
+                            if (adjecentValue == undefined) {
+                                $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+                                    class: 'new c' + mainValue,
+                                    text: mainValue
+                                }));
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos++;
+                            }
+                            else if (adjecentValue == mainValue) {
+                                $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos++;
+                            }
+                        }
+                        k--;
+
+                    } while (k >= 0);
+                }
+            }
+        }
+
+        function moveUp() {
+            for (var i = 1; i < 4; i++) {
+                for (var j = 0; j < 4; j++) {
+                    var pos = j + (i * 4);
+                    var k = i;
+                    do {
+                        var adjecentPos = $(list)[pos - 4];
+                        var adjecentValue = $(adjecentPos).find('div').html();
+                        var mainPos = $(list)[pos];
+                        var mainValue = $(mainPos).find('div').html();
+                        if (mainValue != undefined) {
+                            if (adjecentValue == undefined) {
+                                $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+                                    class: 'new c' + mainValue,
+                                    text: mainValue
+                                }));
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos -= 4;
+                            }
+                            else if (adjecentValue == mainValue) {
+                                $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos -= 4;
+                            }
+                        }
+                        k--;
+
+                    } while (k > 0);
+                }
+            }
+        }
+
+        function moveDown() {
+            for (var i = 1; i < 4; i++) {
+                for (var j = 0; j < 4; j++) {
+                    var pos = j + ((3 - i) * 4);
+                    var k = i;
+                    do {
+                        var adjecentPos = $(list)[pos + 4];
+                        var adjecentValue = $(adjecentPos).find('div').html();
+                        var mainPos = $(list)[pos];
+                        var mainValue = $(mainPos).find('div').html();
+                        if (mainValue != undefined) {
+                            if (adjecentValue == undefined) {
+                                $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+                                    class: 'new c' + mainValue,
+                                    text: mainValue
+                                }));
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos += 4;
+                            }
+                            else if (adjecentValue == mainValue) {
+                                $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+                                $(mainPos).empty().removeClass('o').addClass('b');
+                                pos += 4;
+                            }
+                        }
+                        k--;
+
+                    } while (k > 0);
+                }
+            }
+        }
+
         $(document).keydown(function (e) {
-            var list = $('#container > div');
+            list = $('#container > div');
             //left key
             if (e.keyCode == '37') {
-                for (var i = 1; i <= 3; i++) {
-                    for (var j = 0; j < 4; j++) {
-                        var pos = i + (j * 4);
-                        var k = i;
-                        do {
-                            var adjecentPos = $(list)[pos - 1];
-                            var adjecentValue = $(adjecentPos).find('div').html();
-                            var mainPos = $(list)[pos];
-                            var mainValue = $(mainPos).find('div').html();
-                            if (mainValue != undefined) {
-                                if (adjecentValue == undefined) {
-                                    $(mainPos).find('div').animate({ left: '250px' });
-                                    $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
-                                        class: 'new c' + mainValue,
-                                        text: mainValue
-                                    }));
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos--;
-                                }
-                                else if (adjecentValue == mainValue) {
-                                    //$(mainPos).find('div').animate({ left: '-50px' });
-                                    $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos--;
-                                    //$(mainPos).find('div').animate({ left: '-50px' }, function () {
-                                    //    $(adjecentPos).find('div').html(mainValue * 2);
-                                    //    $(mainPos).empty().removeClass('o').addClass('b');
-                                    //    //pos--
-                                    //});
-                                }
-                            }
-                            k--;
 
-                        } while (k > 0);
-                    }
-                }
-
+                moveLeft();
             }
             //right key
             else if (e.keyCode == '39') {
-                for (var i = 2; i >= 0; i--) {
-                    for (var j = 0; j < 4; j++) {
-                        var pos = i + (j * 4);
-                        var k = 2 - i;
-                        do {
-                            var adjecentPos = $(list)[pos + 1];
-                            var adjecentValue = $(adjecentPos).find('div').html();
-                            var mainPos = $(list)[pos];
-                            var mainValue = $(mainPos).find('div').html();
-                            if (mainValue != undefined) {
-                                if (adjecentValue == undefined) {
-                                    $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
-                                        class: 'new c' + mainValue,
-                                        text: mainValue
-                                    }));
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos++;
-                                }
-                                else if (adjecentValue == mainValue) {
-                                    $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos++;
-                                }
-                            }
-                            k--;
-
-                        } while (k >= 0);
-                    }
-                }
+                moveRight();
             }
             //up
             else if (e.keyCode == "38") {
-                for (var i = 1; i < 4; i++) {
-                    for (var j = 0; j < 4; j++) {
-                        var pos = j + (i * 4);
-                        var k = i;
-                        do {
-                            var adjecentPos = $(list)[pos - 4];
-                            var adjecentValue = $(adjecentPos).find('div').html();
-                            var mainPos = $(list)[pos];
-                            var mainValue = $(mainPos).find('div').html();
-                            if (mainValue != undefined) {
-                                if (adjecentValue == undefined) {
-                                    $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
-                                        class: 'new c' + mainValue,
-                                        text: mainValue
-                                    }));
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos -= 4;
-                                }
-                                else if (adjecentValue == mainValue) {
-                                    $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos -= 4;
-                                }
-                            }
-                            k--;
-
-                        } while (k > 0);
-                    }
-                }
+                moveUp();
             }
             //down
             else if (e.keyCode == "40") {
-                for (var i = 1; i < 4; i++) {
-                    for (var j = 0; j < 4; j++) {
-                        var pos = j + ((3 - i) * 4);
-                        var k = i;
-                        do {
-                            var adjecentPos = $(list)[pos + 4];
-                            var adjecentValue = $(adjecentPos).find('div').html();
-                            var mainPos = $(list)[pos];
-                            var mainValue = $(mainPos).find('div').html();
-                            if (mainValue != undefined) {
-                                if (adjecentValue == undefined) {
-                                    $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
-                                        class: 'new c' + mainValue,
-                                        text: mainValue
-                                    }));
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos += 4;
-                                }
-                                else if (adjecentValue == mainValue) {
-                                    $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
-                                    $(mainPos).empty().removeClass('o').addClass('b');
-                                    pos += 4;
-                                }
-                            }
-                            k--;
-
-                        } while (k > 0);
-                    }
-                }
+                moveDown();
             }
 
             generateNumber();
@@ -216,77 +251,76 @@
             border: 2px solid;
             width: 216px;
             height: 216px;
-            color:White;
-            font-weight:bold;
+            color: White;
+            font-weight: bold;
         }
         
         #header
         {
             margin: auto;
             width: 216px;
-            text-align:center;
-            padding:10px;
+            text-align: center;
+            padding: 10px;
         }
         
         .new
-        {            
+        {
             width: 100%;
             height: 100%;
-            display:flex;
-            align-items:center;
-            justify-content:center;                        
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         input
         {
-            width:49%;
+            width: 49%;
             background-color: #bbada0;
-            height:25px;
-            font-weight:bold;
-            
+            height: 25px;
+            font-weight: bold;
         }
         .c2
         {
-            background-color:#485d68;
+            background-color: #485d68;
         }
         .c4
         {
-            background-color:#2ca796;
+            background-color: #2ca796;
         }
         .c8
         {
-            background-color:#8e4c0c;
+            background-color: #8e4c0c;
         }
         .c16
         {
-            background-color:#ac1d7f;
+            background-color: #ac1d7f;
         }
         .c32
         {
-            background-color:#ffc605;
+            background-color: #ffc605;
         }
         .c64
         {
-            background-color:#00abd6;
+            background-color: #00abd6;
         }
         .c128
         {
-            background-color:#018752;
+            background-color: #018752;
         }
         .c256
         {
-            background-color:#ff6d00;
+            background-color: #ff6d00;
         }
         .c512
         {
-            background-color:#c6d601;
+            background-color: #c6d601;
         }
         .c1024
         {
-            background-color:#00457c;
+            background-color: #00457c;
         }
         .c2048
         {
-            background-color:#f3426e;
+            background-color: #f3426e;
         }
     </style>
 </head>
