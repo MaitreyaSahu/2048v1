@@ -1,36 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html id="game">
 <head>
     <title>2048V1</title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css">
-  
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css">-->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
-    
+    <!--<script src="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>-->
+    <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+
     <script type="text/javascript">
+        var mainPos;
+        var mainValue;
+        var adjecentPos;
+        var adjecentValue;
         $(function () {
+
             createGrid(16);
             var list;
-            $('body').on("swipeleft", alert('left'));
-            $('body').on("swiperight", moveRight);
         });
 
-        //        function swipe(direction) {
-        //            if (direction == 'left') {
-        //                moveLeft();
-        //            }
-        //            else if (direction == 'right') {
-        //            moveRight();
-        //            }
-        //        else if (direction == 'up') {
-        //        moveUp();
-        //            }
-        //    else if (direction == 'down') {
-        //    moveDown();
+        //$(function () {
+        $(function () {
+            var element = document.getElementById("game");
+            var mc = new Hammer(element);
+            mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+            mc.on("swipeleft", function () {
+                //alert('swipeleft');
+                moveLeft();
+                generateNumber();
+            });
+
+            mc.on("swiperight", function () {
+                //alert('swiperight');
+                moveRight();
+                generateNumber();
+            });
+
+            mc.on("swipeup", function () {
+                //alert('swipeup');
+                moveUp();
+                generateNumber();
+            });
+
+            mc.on("swipedown", function () {
+                //alert('swipedown');
+                moveDown();
+                generateNumber();
+            });
+
+        });
+
+
+        //function moveLeft() {
+        //    list = $('#container > div');
+
+        //    for (var i = 1; i <= 3; i++) {
+        //        for (var j = 0; j < 4; j++) {
+        //            var pos = i + (j * 4);
+        //            var k = i;
+        //            mainPos = $(list)[pos];
+        //            mainValue = $(mainPos).find('div').html();
+        //            if (mainValue != undefined) {
+        //                do {
+        //                    adjecentPos = $(list)[pos - 1];
+        //                    adjecentValue = $(adjecentPos).find('div').html();
+        //                    if (adjecentValue != undefined) {
+        //                        adjecentPos = $(list)[pos];
+        //                        adjecentValue = $(adjecentPos).find('div').html();
+        //                        break;
+        //                    }
+        //                    pos--;
+        //                    //var adjecentPos = $(list)[pos - 1];
+        //                    //var adjecentValue = $(adjecentPos).find('div').html();
+        //                    //var mainPos = $(list)[pos];
+        //                    //var mainValue = $(mainPos).find('div').html();
+        //                    //if (mainValue != undefined) {
+        //                    //    if (adjecentValue == undefined) {
+        //                    //        $(mainPos).find('div').animate({ left: '-230px' }, 'slow');
+        //                    //        $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+        //                    //            class: 'new c' + mainValue,
+        //                    //            text: mainValue
+        //                    //        }));
+        //                    //        $(mainPos).empty().removeClass('o').addClass('b');
+        //                    //        pos--;
+        //                    //    }
+        //                    //    else if (adjecentValue == mainValue) {
+        //                    //        $(mainPos).find('div').animate({ left: '-230px' }, 'slow');
+        //                    //        $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+        //                    //        $(mainPos).empty().removeClass('o').addClass('b');
+        //                    //        pos--;
+        //                    //    }
+        //                    //}
+        //                    k--;
+        //                } while (k > 0);
+        //                //$(mainPos).find('div').animate({ left: ((i - k) * (-230)) + 'px' });
+        //                if (adjecentValue == mainValue) {
+        //                    $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
+        //                    //continue;
+        //                }
+        //                else {
+        //                    $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
+        //                        class: 'new c' + mainValue,
+        //                        text: mainValue
+        //                    }))
+        //                }
+        //                $(mainPos).empty().removeClass('o').addClass('b')
+
+
         //            }
         //        }
+        //    }
+        //}
 
         function moveLeft() {
+            list = $('#container > div');
+
             for (var i = 1; i <= 3; i++) {
                 for (var j = 0; j < 4; j++) {
                     var pos = i + (j * 4);
@@ -42,7 +127,7 @@
                         var mainValue = $(mainPos).find('div').html();
                         if (mainValue != undefined) {
                             if (adjecentValue == undefined) {
-                                $(mainPos).find('div').animate({ left: '250px' });
+                                $(mainPos).find('div').animate({ left: '-230px' }, 'slow');
                                 $(adjecentPos).removeClass('b').addClass('o').append($('<div />', {
                                     class: 'new c' + mainValue,
                                     text: mainValue
@@ -51,25 +136,22 @@
                                 pos--;
                             }
                             else if (adjecentValue == mainValue) {
-                                //$(mainPos).find('div').animate({ left: '-50px' });
+                                $(mainPos).find('div').animate({ left: '-230px' }, 'slow');
                                 $(adjecentPos).find('div').removeClass('c' + mainValue).addClass('c' + mainValue * 2).html(mainValue * 2);
                                 $(mainPos).empty().removeClass('o').addClass('b');
                                 pos--;
-                                //$(mainPos).find('div').animate({ left: '-50px' }, function () {
-                                //    $(adjecentPos).find('div').html(mainValue * 2);
-                                //    $(mainPos).empty().removeClass('o').addClass('b');
-                                //    //pos--
-                                //});
                             }
                         }
                         k--;
-
                     } while (k > 0);
+
                 }
             }
         }
 
+
         function moveRight() {
+            list = $('#container > div');
             for (var i = 2; i >= 0; i--) {
                 for (var j = 0; j < 4; j++) {
                     var pos = i + (j * 4);
@@ -95,13 +177,12 @@
                             }
                         }
                         k--;
-
                     } while (k >= 0);
                 }
             }
         }
-
         function moveUp() {
+            list = $('#container > div');
             for (var i = 1; i < 4; i++) {
                 for (var j = 0; j < 4; j++) {
                     var pos = j + (i * 4);
@@ -127,13 +208,12 @@
                             }
                         }
                         k--;
-
                     } while (k > 0);
                 }
             }
         }
-
         function moveDown() {
+            list = $('#container > div');
             for (var i = 1; i < 4; i++) {
                 for (var j = 0; j < 4; j++) {
                     var pos = j + ((3 - i) * 4);
@@ -159,36 +239,10 @@
                             }
                         }
                         k--;
-
                     } while (k > 0);
                 }
             }
         }
-
-        $(document).keydown(function (e) {
-            list = $('#container > div');
-            //left key
-            if (e.keyCode == '37') {
-
-                moveLeft();
-            }
-            //right key
-            else if (e.keyCode == '39') {
-                moveRight();
-            }
-            //up
-            else if (e.keyCode == "38") {
-                moveUp();
-            }
-            //down
-            else if (e.keyCode == "40") {
-                moveDown();
-            }
-
-            generateNumber();
-
-        });
-
 
         function createGrid(size) {
             $('#container').empty();
@@ -199,17 +253,13 @@
                 }));
             }
         };
-
         function getGridMatrix() {
             $('#container', div).each(function () {
-
             });
         };
-
         function getRandomNumber(maxLimit) {
             return Math.floor(Math.random() * maxLimit);
         };
-
         function generateNumber() {
             //debugger;
             //get list of blank positions
@@ -228,101 +278,127 @@
                 }));
             }
         }
-        
-    </script>
+
+        $(document).keydown(function (e) {
+            list = $('#container > div');
+            //left key
+            if (e.keyCode == '37') {
+                moveLeft();
+                generateNumber();
+            }
+            //right key
+            else if (e.keyCode == '39') {
+                moveRight();
+                generateNumber();
+            }
+            //up
+            else if (e.keyCode == "38") {
+                moveUp();
+                generateNumber();
+            }
+            //down
+            else if (e.keyCode == "40") {
+                moveDown();
+                generateNumber();
+            }
+
+        });
+
+
+/**/</script>
     <style type="text/css">
-        body
-        {
+        body {
             margin: auto;
-            width: 50%;
             background-color: #faf8ef;
             padding: 20px;
         }
-        .test
-        {
+
+        .test {
             background-color: #bbada0;
-            border: 2px solid;
+            border: 15px solid;
             float: left;
-            width: 50px;
-            height: 50px;
+            width: 200px;
+            height: 200px;
             margin: 0;
             padding: 0;
+            position: relative;
         }
-        #container
-        {
+
+        #container {
             margin: auto;
-            border: 2px solid;
-            width: 216px;
-            height: 216px;
+            border: 15px solid;
+            width: 920px;
+            height: 920px;
             color: White;
             font-weight: bold;
+            font-size: 100px;
         }
-        
-        #header
-        {
+
+        #header {
             margin: auto;
-            width: 216px;
+            width: 920px;
             text-align: center;
             padding: 10px;
         }
-        
-        .new
-        {
+
+        .new {
             width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: absolute;
         }
-        input
-        {
+
+        input {
             width: 49%;
             background-color: #bbada0;
-            height: 25px;
+            height: 100px;
             font-weight: bold;
+            font-size: 50px;
         }
-        .c2
-        {
+
+        .c2 {
             background-color: #485d68;
         }
-        .c4
-        {
+
+        .c4 {
             background-color: #2ca796;
         }
-        .c8
-        {
+
+        .c8 {
             background-color: #8e4c0c;
         }
-        .c16
-        {
+
+        .c16 {
             background-color: #ac1d7f;
         }
-        .c32
-        {
+
+        .c32 {
             background-color: #ffc605;
         }
-        .c64
-        {
+
+        .c64 {
             background-color: #00abd6;
         }
-        .c128
-        {
+
+        .c128 {
             background-color: #018752;
         }
-        .c256
-        {
+
+        .c256 {
             background-color: #ff6d00;
         }
-        .c512
-        {
+
+        .c512 {
             background-color: #c6d601;
         }
-        .c1024
-        {
+
+        .c1024 {
             background-color: #00457c;
         }
-        .c2048
-        {
+
+        .c2048 {
             background-color: #f3426e;
         }
     </style>
